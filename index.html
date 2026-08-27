@@ -1386,7 +1386,12 @@ document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeM
     spinning=true;btn.disabled=true;btn.textContent='On tourne…';
     result.hidden=true;winP.hidden=loseP.hidden=errP.hidden=true;
 
-    fetch('/.netlify/functions/wheel-spin',{
+    /* mypils.com est servi par GitHub Pages, qui n'exécute aucune fonction
+       serveur — les fonctions Netlify (Admin API Shopify) tournent sur le
+       site Netlify séparé, mypilsbuy.netlify.app. D'où l'adresse complète
+       plutôt qu'un chemin relatif : un chemin relatif chercherait la
+       fonction sur mypils.com lui-même, où elle n'existe pas. */
+    fetch('https://mypilsbuy.netlify.app/.netlify/functions/wheel-spin',{
       method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v})
     })
     .then(function(r){return r.json().then(function(d){return {status:r.status,d:d};});})
