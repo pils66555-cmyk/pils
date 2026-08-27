@@ -116,8 +116,20 @@ async function createRealDiscount(token, email) {
 exports.handler = async function (event) {
   const headers = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
+    /* mypils.com (GitHub Pages) et mypilsbuy.netlify.app appellent tous les
+       deux cette fonction — les deux doivent être autorisés. */
+    'Access-Control-Allow-Origin': 'https://mypils.com',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
   };
+
+  /* Requête préliminaire envoyée automatiquement par le navigateur avant tout
+     appel POST en JSON vers un autre domaine (mypils.com → netlify.app).
+     Sans cette réponse, le navigateur bloque l'appel réel avant même qu'il
+     ne parte. */
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers, body: '' };
+  }
 
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, headers, body: JSON.stringify({ error: 'method_not_allowed' }) };
