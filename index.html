@@ -239,6 +239,42 @@ body{font-family:'Inter',sans-serif;font-weight:300;background:#F6F1EA;color:#1A
 .modal-body li{color:rgba(26,20,16,.68);font-size:.9rem;line-height:1.78;padding-left:16px;position:relative;}
 .modal-body li::before{content:'·';position:absolute;left:4px;color:var(--bg,#E8556D);}
 .modal-body b{color:#1A1410;font-weight:600;}
+
+/* ================= ROUE DE LA FORTUNE ================= */
+.wheel-fab{position:fixed;right:16px;bottom:16px;z-index:230;
+  display:flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-weight:700;
+  font-size:.78rem;padding:11px 16px;border-radius:60px;border:none;cursor:pointer;
+  background:var(--bg,#E8556D);color:#fff;box-shadow:0 8px 24px rgba(26,20,16,.25);
+  transition:background-color .85s ease,transform .2s ease;}
+.wheel-fab:hover{transform:translateY(-2px);}
+@media(max-width:900px){.wheel-fab{bottom:96px;}}  /* au-dessus de la barre d'achat mobile */
+
+.wheel-rules-note{font-size:.8rem !important;}
+.wheel-stage{position:relative;width:200px;max-width:60vw;margin:14px auto 18px;}
+.wheel-svg{width:100%;height:auto;display:block;
+  transition:transform 3.2s cubic-bezier(.12,.85,.15,1);}
+.wheel-pointer{position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;
+  border-top:16px solid #1A1410;z-index:2;}
+
+#wheelForm{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+#wheelForm input{font:inherit;font-size:.88rem;padding:12px 16px;border-radius:60px;min-width:210px;
+  border:1px solid rgba(26,20,16,.18);background:#fff;text-align:center;}
+#wheelForm input:focus-visible{outline:2px solid var(--bg,#E8556D);outline-offset:1px;}
+#wheelForm button{font-family:'Inter',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;padding:12px 22px;border-radius:60px;border:none;cursor:pointer;
+  background:#1A1410;color:#fff;transition:transform .2s ease,opacity .2s ease;}
+#wheelForm button:hover{transform:translateY(-2px);}
+#wheelForm button:disabled{opacity:.5;cursor:default;transform:none;}
+
+.wheel-result{margin-top:16px;text-align:center;font-size:.92rem;line-height:1.6;}
+.wheel-result-win{color:#1A1410;}
+.wheel-result-win b{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:1.05rem;
+  background:rgba(0,0,0,.06);padding:2px 9px;border-radius:8px;letter-spacing:.02em;}
+.wheel-result-win #wheelClock{font-variant-numeric:tabular-nums;font-weight:700;}
+.wheel-result-lose,.wheel-result-err{opacity:.7;}
+.wheel-legal{font-size:.68rem !important;opacity:.5;text-align:center;margin-top:14px !important;}
+
 @media (max-width:680px){
   .legal{padding:70px 0;}
   .modal{padding:38px 24px 32px;border-radius:18px;}
@@ -619,6 +655,10 @@ span.pay-ic svg{height:12px;width:auto;display:block;}
   <span>Livraison gratuite en France et en Belgique</span>
 </div>
 
+<button type="button" class="wheel-fab" onclick="openModal('wheel')" aria-label="Tenter la roue Pils.">
+  🎁 <span>-5 %&nbsp;?</span>
+</button>
+
 <!-- ================= ONGLETS ================= -->
 <div class="tabsbar" role="tablist" aria-label="Sections du site">
   <button class="tb" data-view="home" role="tab" aria-selected="false">L'objet</button>
@@ -994,14 +1034,14 @@ span.pay-ic svg{height:12px;width:auto;display:block;}
       <p>Le site <b>mypils.com</b> est édité par <span>auto-entrepreneur</span>.</p>
       <ul>
         <li>SIRET : 942 721 358 00011</li>
-        <li>Siège social : Bordeaux, 33000, France</li>
+        <li>Siège social : 50 avenue d'Espagne, 64250 Cambo-les-Bains, France</li>
         <li>Email : contact@mypils.com</li>
         
         <li>TVA intracommunautaire : TVA non applicable, art. 293 B du CGI</li>
       </ul>
 
       <h3>Hébergement</h3>
-      <p>Le site est hébergé par <b>Netlify, Inc.</b>, 512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis — netlify.com. La boutique et le paiement sont opérés par <b>Shopify International Ltd.</b>, Victoria Buildings, 1-2 Haddington Road, Dublin 4, Irlande.</p>
+      <p>Le site est hébergé par <b>GitHub, Inc.</b> (GitHub Pages), 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis — github.com. La boutique et le paiement sont opérés par <b>Shopify International Ltd.</b>, Victoria Buildings, 1-2 Haddington Road, Dublin 4, Irlande.</p>
 
       <h3>Propriété intellectuelle</h3>
       <p>Les textes, le design et l'identité visuelle de ce site sont la propriété de son éditeur. Toute reproduction sans autorisation est interdite.</p>
@@ -1015,7 +1055,7 @@ span.pay-ic svg{height:12px;width:auto;display:block;}
       <h3>Responsable du traitement</h3>
       <p>Pils., joignable à contact@mypils.com.</p>
       <h3>Données collectées</h3>
-      <p>Lors d'une commande, le paiement est traité par <b>Shopify Payments</b>, qui collecte votre <b>email, nom et adresse</b> de livraison et de facturation. Le site lui-même ne mémorise, dans votre navigateur, que des <b>préférences d'affichage</b> (langue choisie, variante d'affichage du bouton d'achat) — aucune donnée personnelle, aucun identifiant publicitaire.</p>
+      <p>Lors d'une commande, le paiement est traité par <b>Shopify Payments</b>, qui collecte votre <b>email, nom et adresse</b> de livraison et de facturation. Si vous participez à <b>la roue</b>, votre email sert uniquement à générer et vous attribuer votre code de réduction — il n'est pas ajouté à une liste de diffusion sans action de votre part. Le site lui-même ne mémorise, dans votre navigateur, que des <b>préférences d'affichage</b> (langue choisie, variante d'affichage du bouton d'achat) — aucune donnée personnelle, aucun identifiant publicitaire.</p>
       <h3>Finalité &amp; base légale</h3>
       <p>Ces données servent uniquement au traitement, au suivi et à la livraison de votre commande (exécution du contrat de vente, art. 6.1.b du RGPD).</p>
       <h3>Destinataires</h3>
@@ -1030,7 +1070,35 @@ span.pay-ic svg{height:12px;width:auto;display:block;}
       <p>Ce site n'utilise <b>aucun cookie publicitaire ni traceur tiers</b>. Seules des préférences d'affichage sont mémorisées localement (localStorage), sans donnée personnelle ni suivi entre sites — aucun bandeau cookies n'est donc requis.</p>
     </div>
 
-  
+    <div class="modal-body modal-wheel-body" id="modal-wheel" hidden>
+      <span class="label">Jeu concours</span>
+      <h2 class="serif">La roue Pils.</h2>
+      <p class="wheel-rules-note">Une chance sur deux de gagner <b>-5 % supplémentaires</b>, valables 30 minutes. Jeu sans obligation d'achat, un tirage par adresse email.</p>
+
+      <div class="wheel-stage">
+        <svg class="wheel-svg" id="wheelSvg" viewBox="0 0 220 220" aria-hidden="true"></svg>
+        <div class="wheel-pointer" aria-hidden="true"></div>
+      </div>
+
+      <form id="wheelForm" novalidate>
+        <input id="wheelMail" type="email" autocomplete="email" placeholder="votre@email.com" aria-label="Votre adresse email" required>
+        <button type="submit" id="wheelSpinBtn">Tourner la roue</button>
+      </form>
+
+      <div class="wheel-result" id="wheelResult" hidden>
+        <p class="wheel-result-win" id="wheelWin" hidden>
+          🎉 Gagné — code <b id="wheelCode"></b><br>
+          Valable <span id="wheelClock"></span> · à utiliser au moment de payer
+        </p>
+        <p class="wheel-result-lose" id="wheelLose" hidden>
+          Pas cette fois. Retente ta chance dans 30 minutes !
+        </p>
+        <p class="wheel-result-err" id="wheelErr" hidden>
+          Un souci technique nous empêche de générer ton code là, réessaie dans un instant.
+        </p>
+      </div>
+      <p class="wheel-legal">Un seul tirage par adresse email toutes les 30 minutes. Règlement complet sur simple demande à contact@mypils.com.</p>
+    </div>
   </div>
 </div>
 
@@ -1236,6 +1304,7 @@ Array.prototype.forEach.call(document.querySelectorAll('.ac-q'), function(b){
 function openModal(which){
   document.getElementById('modal-legal').hidden = (which !== 'legal');
   document.getElementById('modal-privacy').hidden = (which !== 'privacy');
+  document.getElementById('modal-wheel').hidden = (which !== 'wheel');
   var ov = document.getElementById('modalOverlay');
   ov.classList.add('open');
   ov.scrollTop = 0;
@@ -1249,6 +1318,103 @@ document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeM
 
 /* annee du copyright toujours a jour */
 (function(){ var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+
+/* ═════════ Roue de la fortune ═════════
+   Le tirage se fait sur le serveur (netlify/functions/wheel-spin.js) — jamais
+   ici. Cette partie ne fait que : (1) demander le résultat, (2) faire tourner
+   visuellement la roue jusqu'à une case qui correspond VRAIMENT à ce résultat,
+   (3) si gagné, afficher le vrai code Shopify reçu et son vrai décompte
+   d'expiration. Rien n'est simulé côté client. */
+(function(){
+  var svg=document.getElementById('wheelSvg');
+  if(!svg)return;
+  var N=8, R=100, CX=110, CY=110;
+  var centers=[];               // angle du centre de chaque case, 0° = en haut, sens horaire
+  var ns='http://www.w3.org/2000/svg';
+
+  function polar(angleDeg,radius){
+    var a=(angleDeg-90)*Math.PI/180;
+    return [CX+radius*Math.cos(a), CY+radius*Math.sin(a)];
+  }
+  for(var i=0;i<N;i++){
+    var a0=i*(360/N), a1=(i+1)*(360/N);
+    centers.push(a0+(360/N)/2);
+    var p0=polar(a0,R), p1=polar(a1,R);
+    var path=document.createElementNS(ns,'path');
+    path.setAttribute('d','M'+CX+','+CY+' L'+p0[0]+','+p0[1]+' A'+R+','+R+' 0 0 1 '+p1[0]+','+p1[1]+' Z');
+    path.setAttribute('fill', i%2===0 ? 'var(--bg,#E8556D)' : '#F6F1EA');
+    path.setAttribute('stroke','#1A1410');path.setAttribute('stroke-width','1');
+    svg.appendChild(path);
+    var mid=polar(centers[i],R*0.62);
+    var txt=document.createElementNS(ns,'text');
+    txt.setAttribute('x',mid[0]);txt.setAttribute('y',mid[1]);
+    txt.setAttribute('text-anchor','middle');txt.setAttribute('dominant-baseline','middle');
+    txt.setAttribute('font-family','Inter,sans-serif');txt.setAttribute('font-weight','800');
+    txt.setAttribute('font-size','9');
+    txt.setAttribute('fill', i%2===0 ? '#fff' : '#1A1410');
+    txt.setAttribute('transform','rotate('+centers[i]+' '+mid[0]+' '+mid[1]+')');
+    txt.textContent = i%2===0 ? '-5%' : 'PERDU';
+    svg.appendChild(txt);
+  }
+  var winIdx=[],loseIdx=[];
+  for(var k=0;k<N;k++){(k%2===0?winIdx:loseIdx).push(k);}
+
+  var form=document.getElementById('wheelForm'), mail=document.getElementById('wheelMail'),
+      btn=document.getElementById('wheelSpinBtn'), result=document.getElementById('wheelResult'),
+      winP=document.getElementById('wheelWin'), loseP=document.getElementById('wheelLose'),
+      errP=document.getElementById('wheelErr'), codeEl=document.getElementById('wheelCode'),
+      clockEl=document.getElementById('wheelClock');
+  var spinning=false, totalRotation=0, countdownTimer=null;
+
+  function pad(n){return (n<10?'0':'')+n;}
+  function runCountdown(expiresAtISO){
+    if(countdownTimer)clearInterval(countdownTimer);
+    var end=new Date(expiresAtISO).getTime();
+    function tick(){
+      var left=end-Date.now();
+      if(left<=0){clockEl.textContent='expiré';clearInterval(countdownTimer);return;}
+      clockEl.textContent=pad(Math.floor(left/60000))+':'+pad(Math.floor(left/1000)%60);
+    }
+    tick();countdownTimer=setInterval(tick,1000);
+  }
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(spinning)return;
+    var v=(mail.value||'').trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){mail.focus();return;}
+    spinning=true;btn.disabled=true;btn.textContent='On tourne…';
+    result.hidden=true;winP.hidden=loseP.hidden=errP.hidden=true;
+
+    fetch('/.netlify/functions/wheel-spin',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v})
+    })
+    .then(function(r){return r.json().then(function(d){return {status:r.status,d:d};});})
+    .then(function(res){
+      var d=res.d, won = (res.status===200 && d.win===true);
+      var pool = won ? winIdx : loseIdx;
+      var target = pool[Math.floor(Math.random()*pool.length)];
+      // 6 tours complets + alignement exact sur la case qui correspond au vrai résultat.
+      totalRotation += (6*360) - (totalRotation%360) - centers[target];
+      svg.style.transform='rotate('+totalRotation+'deg)';
+      setTimeout(function(){
+        spinning=false;btn.disabled=false;btn.textContent='Retourner la roue';
+        result.hidden=false;
+        if(won){
+          winP.hidden=false;codeEl.textContent=d.code;runCountdown(d.expiresAt);
+        }else if(res.status===200){
+          loseP.hidden=false;
+        }else{
+          errP.hidden=false;
+        }
+      },3300);
+    })
+    .catch(function(){
+      spinning=false;btn.disabled=false;btn.textContent='Tourner la roue';
+      result.hidden=false;errP.hidden=false;
+    });
+  });
+})();
 
 /* La boutique n'est pas la page d'ouverture : le carrousel démarre à l'affichage
    de la vue (showView), pas au chargement, pour ne rien consommer inutilement. */
