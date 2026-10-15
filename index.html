@@ -2347,15 +2347,37 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
     return scLoading;
   }
   /* le sélecteur s'ouvre en surimpression : on s'assure qu'il passe devant le panier */
+  /* tout ce qui est dans le body avant Sendcloud appartient au site */
+  Array.prototype.forEach.call(document.body.children, function(n){ n.dataset.pils = '1'; });
   function liftOverlays(){
+    var mine = function(n){ return n === cart || n.tagName === 'SCRIPT' || n.tagName === 'STYLE' || n.tagName === 'LINK' || n.dataset.pils === '1'; };
+    var lift = function(n){
+      if (n.nodeType !== 1 || mine(n)) return;
+      n.style.setProperty('z-index', '2147483000', 'important');
+      n.style.setProperty('pointer-events', 'auto', 'important');
+    };
+    /* nœuds déjà créés lors d'une ouverture précédente */
+    Array.prototype.forEach.call(document.body.children, lift);
+    /* le panier passe derrière le temps du choix */
+    cart.style.zIndex = '1'; cart.style.pointerEvents = 'none';
     var mo = new MutationObserver(function(list){
-      list.forEach(function(m){ Array.prototype.forEach.call(m.addedNodes, function(n){
-        if (n.nodeType === 1 && n !== cart && n.parentNode === document.body) n.style.zIndex = '2147483000';
-      }); });
+      list.forEach(function(m){ Array.prototype.forEach.call(m.addedNodes, lift); });
     });
     mo.observe(document.body, { childList: true });
-    setTimeout(function(){ mo.disconnect(); }, 15000);
+    /* restauration quand la fenêtre Sendcloud est fermée */
+    var started = Date.now();
+    var t = setInterval(function(){
+      if (Date.now() - started < 800) return;
+      var open = Array.prototype.some.call(document.body.children, function(n){
+        if (n.nodeType !== 1 || mine(n) || n.id === 'pils-root') return false;
+        var r = n.getBoundingClientRect(), cs = getComputedStyle(n);
+        return cs.display !== 'none' && cs.visibility !== 'hidden' && r.width > 200 && r.height > 200 && n.style.zIndex === '2147483000';
+      });
+      if (!open){ restoreCart(); clearInterval(t); mo.disconnect(); }
+    }, 400);
+    setTimeout(function(){ clearInterval(t); mo.disconnect(); restoreCart(); }, 600000);
   }
+  function restoreCart(){ cart.style.zIndex = ''; cart.style.pointerEvents = ''; }
   function openPicker(){
     var zip = ($('scZip').value || '').replace(/\D/g, '');
     hideErr();
@@ -2373,7 +2395,7 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
         carriers: C.scCarrier,
         servicePointId: st.relay ? st.relay.scId : undefined
       }, pickRelay, function(errors){
-        console.warn('[Pils] Sendcloud :', errors);
+        console.warn('[Pils] Sendcloud :', errors); restoreCart();
         showErr('Impossible d’afficher les points relais pour le moment. Réessayez dans un instant.');
       });
     })['catch'](function(e){
@@ -2398,6 +2420,7 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
   });
   $('scZip').addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); openPicker(); } });
   function pickRelay(p){
+    restoreCart();
     if (!p || !(p.id || p.code)) return;
     var clean = function(v){ return String(v || '').replace(/\s+/g, ' ').trim(); };
     var street = clean([p.house_number, p.street].filter(Boolean).join(' '));
