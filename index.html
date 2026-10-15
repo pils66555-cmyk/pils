@@ -2400,34 +2400,33 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
   /* tout ce qui est dans le body avant Sendcloud appartient au site */
   Array.prototype.forEach.call(document.body.children, function(n){ n.dataset.pils = '1'; });
   function liftOverlays(){
-    var mine = function(n){ return n === cart || n.tagName === 'SCRIPT' || n.tagName === 'STYLE' || n.tagName === 'LINK' || n.dataset.pils === '1'; };
+    var mine = function(n){ return n === cart || /^(SCRIPT|STYLE|LINK|NOSCRIPT)$/.test(n.tagName) || n.dataset.pils === '1'; };
     var lift = function(n){
       if (n.nodeType !== 1 || mine(n)) return;
+      if (getComputedStyle(n).position === 'static') n.style.setProperty('position', 'relative', 'important');
       n.style.setProperty('z-index', '2147483000', 'important');
       n.style.setProperty('pointer-events', 'auto', 'important');
     };
-    /* nœuds déjà créés lors d'une ouverture précédente */
+    /* le panier est masqué complètement le temps du choix (plus de voile gris) */
+    cart.style.visibility = 'hidden'; cart.style.pointerEvents = 'none';
     Array.prototype.forEach.call(document.body.children, lift);
-    /* le panier passe derrière le temps du choix */
-    cart.style.zIndex = '1'; cart.style.pointerEvents = 'none';
     var mo = new MutationObserver(function(list){
       list.forEach(function(m){ Array.prototype.forEach.call(m.addedNodes, lift); });
     });
     mo.observe(document.body, { childList: true });
-    /* restauration quand la fenêtre Sendcloud est fermée */
-    var started = Date.now();
+    /* fermeture du sélecteur (Annuler) : plus aucun élément Sendcloud visible */
+    var started = Date.now(), seen = false;
     var t = setInterval(function(){
-      if (Date.now() - started < 800) return;
-      var open = Array.prototype.some.call(document.body.children, function(n){
-        if (n.nodeType !== 1 || mine(n) || n.id === 'pils-root') return false;
-        var r = n.getBoundingClientRect(), cs = getComputedStyle(n);
-        return cs.display !== 'none' && cs.visibility !== 'hidden' && r.width > 200 && r.height > 200 && n.style.zIndex === '2147483000';
+      var vis = Array.prototype.some.call(document.body.children, function(n){
+        if (n.nodeType !== 1 || mine(n)) return false;
+        var cs = getComputedStyle(n);
+        return cs.display !== 'none' && cs.visibility !== 'hidden' && cs.opacity !== '0' && n.offsetWidth > 100 && n.offsetHeight > 100;
       });
-      if (!open){ restoreCart(); clearInterval(t); mo.disconnect(); }
-    }, 400);
-    setTimeout(function(){ clearInterval(t); mo.disconnect(); restoreCart(); }, 600000);
+      if (vis) seen = true;
+      if ((seen && !vis) || (!seen && Date.now() - started > 8000)){ clearInterval(t); mo.disconnect(); restoreCart(); }
+    }, 300);
   }
-  function restoreCart(){ cart.style.zIndex = ''; cart.style.pointerEvents = ''; }
+  function restoreCart(){ cart.style.visibility = ''; cart.style.pointerEvents = ''; cart.style.zIndex = ''; }
   function openPicker(){
     var zip = ($('scZip').value || '').replace(/\D/g, '');
     hideErr();
