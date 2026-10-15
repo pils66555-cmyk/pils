@@ -718,6 +718,17 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
 .cart-safe{margin-top:8px!important;font-size:.68rem}
 .cart-err{margin-bottom:8px;padding:8px 12px;font-size:.8rem}
 
+/* ===== Panier : bouton Payer jamais « mort », relais mis en avant ===== */
+.cart-pay.need-relay{background:var(--ink);color:#fff;box-shadow:none}
+.mr-zone .sc-search{background:var(--tint-soft);box-shadow:inset 0 0 0 2px var(--cta)}
+.sc-go{background:var(--cta)!important}
+.mr-zone.pulse .sc-search{animation:mrPulse .9s ease 2}
+@keyframes mrPulse{50%{box-shadow:inset 0 0 0 2px var(--cta),0 0 0 6px color-mix(in srgb,var(--cta) 25%,transparent)}}
+#relayBox{margin-top:4px}
+
+/* ===== Site dézoomé à 90 % (hors panier et carte relais) ===== */
+.topbar,.hdr,main,.foot,.stickybar{zoom:.9}
+
 </style>
 </head>
 <body>
@@ -806,7 +817,7 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
           <div class="opt-h"><span>Téléphone</span></div>
           <div class="devtype" id="cfgDevType" role="radiogroup" aria-label="Type de téléphone">
             <span class="seg-thumb" aria-hidden="true"></span>
-            <button type="button" class="cfg-dt" data-dt="iphone" role="radio" aria-checked="true">iPhone 12+</button>
+            <button type="button" class="cfg-dt" data-dt="iphone" role="radio" aria-checked="true">iPhone 12 et +</button>
             <button type="button" class="cfg-dt" data-dt="autre" role="radio" aria-checked="false">Autre</button>
           </div>
           <p class="dt-help" id="dtHelp">Se fixe directement par MagSafe.</p>
@@ -1576,7 +1587,7 @@ function cfgLayout(){
        échelle minuscule pour caser 62+26+56 mm en largeur. */
     var RW=56, gap=20, ringH=RW*(560/412);        /* la languette allonge l'image */
     var blockH=100+gap+ringH, blockW=Math.max(62,RW);
-    var ppm2=Math.min((W-40)/blockW, (H-40)/blockH);
+    var ppm2=Math.min((W*.7)/blockW, (H*.78)/blockH);
     var cw=62*ppm2, ch=100*ppm2;
     var rw=RW*ppm2, rh=rw*(560/412);
     var totalH=ch+gap*ppm2+rh, y0=(H-totalH)/2, cxc=W/2;
@@ -2263,7 +2274,7 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
     requestAnimationFrame(function(){ cart.classList.add('in'); });
     document.documentElement.classList.add('cart-lock');
     if (location.hash !== '#panier') history.pushState(null, '', '#panier');
-    hideErr(); refresh(); if (st.mode === 'relay') loadMR();
+    hideErr(); refresh(); if (st.mode === 'relay') loadMR()['catch'](function(){});
     setTimeout(function(){ var b = cart.querySelector('.cart-x'); if (b) b.focus(); }, 60);
   }
   function close(fromHistory){
@@ -2310,7 +2321,8 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
 
   function syncPay(){
     var ready = st.mode === 'home' || !!st.relay;
-    payBtn.disabled = !ready || st.busy;
+    payBtn.disabled = !!st.busy;
+    payBtn.classList.toggle('need-relay', !ready);
     payBtn.textContent = st.busy ? 'Redirection vers le paiement…' : (ready ? 'Payer — ' + euro(total()) : 'Choisissez un point relais');
     $('stRelay').classList.toggle('on', ready);
     var sh = C.ship[st.mode];
@@ -2371,6 +2383,19 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
     });
   }
   $('scGo').addEventListener('click', openPicker);
+  payBtn.addEventListener('click', function(e){
+    if (st.mode === 'relay' && !st.relay){
+      e.preventDefault(); e.stopImmediatePropagation();
+      var z = $('scZip'); var box = $('mrZone');
+      if (box) box.scrollIntoView({ behavior:'smooth', block:'center' });
+      if (z){ z.focus({ preventScroll:true }); box.classList.remove('pulse'); void box.offsetWidth; box.classList.add('pulse'); }
+    }
+  }, true);
+  /* code postal complet : ouverture automatique de la carte */
+  $('scZip').addEventListener('input', function(){
+    var v = this.value.replace(/\D/g, '').slice(0, 5); if (this.value !== v) this.value = v;
+    if (v.length === 5) openPicker();
+  });
   $('scZip').addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); openPicker(); } });
   function pickRelay(p){
     if (!p || !(p.id || p.code)) return;
@@ -2405,7 +2430,7 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
       st.mode = r.value; hideErr();
       $('relayBox').hidden = st.mode !== 'relay';
       $('homeBox').hidden = st.mode !== 'home';
-      if (st.mode === 'relay') loadMR();
+      if (st.mode === 'relay') loadMR()['catch'](function(){});
       syncPay();
     });
   });
