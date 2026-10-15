@@ -621,6 +621,56 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
 .sc-search input:focus{outline:2px solid var(--ink);outline-offset:0}
 .sc-go{height:48px;padding:0 18px;border-radius:12px;background:var(--ink);color:#fff;font-size:.92rem}
 .sc-go:disabled{opacity:.6}
+/* panier compact : tout visible sans défiler */
+.cart-head{padding:16px 20px 4px}
+.cart-head h2{font-size:1.1rem}
+.cart-x{width:30px;height:30px}
+.cart-body{padding:4px 20px 12px}
+.cart-steps{margin:2px 0 10px}
+.cart-steps li{font-size:.68rem;padding-top:6px}
+.cart-item{grid-template-columns:48px 1fr auto;gap:10px;padding:8px 0}
+.ci-vis{width:48px;height:48px;border-radius:12px}
+.ci-txt h3{font-size:.86rem}
+.ci-txt p{font-size:.74rem}
+.ci-price{font-size:.86rem}
+.qty{margin-top:5px;padding:2px}
+.qty button{width:24px;height:24px;font-size:.9rem}
+.qty output{min-width:24px;font-size:.82rem}
+.relay{margin-top:14px}
+.relay-h h3{font-size:.92rem;margin:0 0 3px}
+.relay-h p,.relay-help{font-size:.76rem;margin:0 0 8px;line-height:1.35}
+.ship{gap:6px}
+.ship-opt{grid-template-columns:30px 1fr auto;gap:9px;padding:8px 12px;border-radius:12px}
+.ship-ic{width:30px;height:30px;border-radius:9px}
+.ship-ic .ic{width:16px;height:16px}
+.ship-t b{font-size:.82rem}
+.ship-t small{font-size:.7rem;margin-top:1px}
+.ship-p{font-size:.8rem}
+.ship-note{font-size:.7rem;margin:6px 2px 10px}
+.sc-search{padding:4px;border-radius:12px;gap:6px}
+.sc-search input{height:38px;border-radius:9px}
+.sc-go{height:38px;padding:0 12px;font-size:.8rem;border-radius:9px}
+.relay-picked{padding:9px 12px;margin-bottom:8px;border-radius:12px;gap:9px}
+.relay-picked b{font-size:.82rem}
+.relay-picked span{font-size:.72rem}
+.relay-picked button{font-size:.78rem}
+.mr-loading{padding:14px 12px;font-size:.78rem}
+.cart-foot{padding:10px 20px calc(10px + env(safe-area-inset-bottom))}
+.totals{margin:0 0 8px}
+.totals div{font-size:.78rem;padding:1px 0}
+.totals .tot{font-size:.95rem;padding-top:4px}
+.cart-pay{min-height:44px;font-size:.9rem;padding-top:10px;padding-bottom:10px}
+.cart-safe{margin-top:6px;font-size:.66rem}
+.cart-err{font-size:.76rem;padding:8px 12px;margin-bottom:8px}
+@media(max-width:720px){
+  .cart-panel{height:94vh}
+  @supports(height:1dvh){.cart-panel{height:94dvh}}
+  .cart-head{padding:18px 16px 4px}
+  .cart-body{padding:4px 16px 10px}
+  .cart-foot{padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+  .cart-item{grid-template-columns:44px 1fr auto;gap:10px}
+  .ci-vis{width:44px;height:44px;border-radius:11px}
+}
 
 /* ================= SÉLECTEUR DE TEINTE : cartes ================= */
 .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -1060,7 +1110,7 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
             <span class="ship-p"><s>4,90 €</s>Offerte</span></label>
           <label class="ship-opt"><input type="radio" name="ship" value="home">
             <span class="ship-ic"><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg></span>
-            <span class="ship-t"><b>Lettre verte suivie</b><small>Dans votre boîte aux lettres, 3 à 4 jours</small></span>
+            <span class="ship-t"><b>Livraison à domicile</b><small>Dans votre boîte aux lettres, 3 à 4 jours</small></span>
             <span class="ship-p">6,90 €</span></label>
         </div>
         <p class="ship-note">Point relais offert avec le code <b>AUTOMNE</b>, déjà appliqué.</p>
@@ -2251,7 +2301,7 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
      (match), pour que le bon tarif soit présélectionné au checkout. */
   ship : {
     relay : { label:'Point relais', price:4.90, free:true, match:/relais/i },
-    home  : { label:'Lettre verte suivie', price:6.90, free:false, match:/lettre/i }
+    home  : { label:'Livraison à domicile', price:6.90, free:false, match:/lettre/i }
   },
   /* Variant IDs numériques (facultatif). Laissés vides, ils sont retrouvés
      automatiquement par le nom de la teinte via l'API Storefront. */
@@ -2469,7 +2519,7 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
     var input = {
       lines: lines,
       buyerIdentity: { countryCode: (r && r.country) || 'FR' },
-      attributes: [{ key: 'shipping_mode', value: r ? 'Mondial Relay (Sendcloud)' : 'Lettre verte suivie' }]
+      attributes: [{ key: 'shipping_mode', value: r ? 'Mondial Relay (Sendcloud)' : 'Domicile (Lettre verte suivie)' }]
     };
     if (r) {
       input.attributes.push(
