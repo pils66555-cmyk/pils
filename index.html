@@ -74,7 +74,7 @@ b,strong{font-weight:600;}
   border:0;text-decoration:none;font-weight:600;font-size:1rem;cursor:pointer;white-space:nowrap;
   transition:background-color .18s,transform .12s,box-shadow .18s;}
 .btn:active{transform:scale(.985);}
-.btn-buy{background:var(--cta);color:var(--cta-ink);box-shadow:0 10px 24px -12px rgba(200,57,94,.65);}
+.btn-buy{background:var(--cta);color:var(--cta-ink);box-shadow:0 10px 24px -12px color-mix(in srgb,var(--cta) 65%,transparent);}
 .btn-buy:hover{background:var(--cta-2);}
 .btn-hdr{height:40px;padding:0 6px 0 16px;background:var(--ink);color:#fff;font-size:.9rem;}
 .btn-hdr:hover{background:#000;}
@@ -96,7 +96,7 @@ b,strong{font-weight:600;}
 .nav a:hover{background:var(--paper-2);color:var(--ink);}
 
 /* ---------- hero + configurateur : téléphone à gauche, réglages à droite ---------- */
-.hero{padding:clamp(24px,3vw,44px) 0 clamp(64px,9vw,120px);}
+.hero{padding:clamp(20px,2.4vw,36px) 0 clamp(44px,6vw,80px);}
 .hero-head{display:flex;align-items:flex-end;gap:32px;margin-bottom:clamp(24px,3vw,40px);}
 .hero-head h1{max-width:17ch;flex:1;}
 .lead{font-size:1.08rem;color:var(--ink-2);max-width:34ch;line-height:1.5;padding-bottom:6px;}
@@ -181,7 +181,7 @@ b,strong{font-weight:600;}
 
 /* ---------- sections ---------- */
 section{scroll-margin-top:calc(var(--hdr-h) + 10px);}
-.why,.how,.compat,.guar,.faq{padding:clamp(72px,11vw,140px) 0;}
+.why,.how,.compat,.guar,.faq{padding:clamp(44px,6.5vw,88px) 0;}
 .why{background:var(--paper-2);}
 .why-in{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,6vw,80px);align-items:center;}
 .why-vis{border-radius:32px;background:radial-gradient(90% 70% at 50% 60%,var(--tint-soft),transparent 75%),#fff;display:flex;justify-content:center;align-items:center;padding:clamp(28px,5vw,56px) 20px;transition:background-color .4s;}
@@ -341,8 +341,6 @@ section{scroll-margin-top:calc(var(--hdr-h) + 10px);}
 @media (max-width:1000px){
   .nav{display:none;}
   .btn-hdr{margin-left:auto;}
-  #cfgCCols{gap:8px;}
-  #cfgCCols .cfg-sw.big{width:42px;height:42px;}
   .steps{grid-template-columns:1fr;}
   .compat-in{grid-template-columns:1fr;gap:20px;}
 }
@@ -378,8 +376,6 @@ section{scroll-margin-top:calc(var(--hdr-h) + 10px);}
   .opt-h{margin-bottom:7px;flex-direction:column;align-items:flex-start;gap:0;}
   .opt-h span{font-size:.66rem;}
   .opt-h b{font-size:.88rem;text-align:left;}
-  #cfgCCols{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 8px;justify-items:start;}
-  #cfgCCols .cfg-sw.big{width:40px;height:40px;}
   .sw-phone{gap:8px;}
   .sw-phone .cfg-sw{width:26px;height:26px;}
   .devtype{gap:6px;}
@@ -437,7 +433,6 @@ section{scroll-margin-top:calc(var(--hdr-h) + 10px);}
 }
 }
 @media (max-width:360px){
-  #cfgCCols .cfg-sw.big{width:36px;height:36px;}
   .dt-t small{display:none;}
   .btn-hdr .hdr-l{display:none;}
   .btn-hdr{padding:0 4px;}
@@ -468,8 +463,6 @@ section{scroll-margin-top:calc(var(--hdr-h) + 10px);}
   .opt-h{flex-direction:column;align-items:flex-start;gap:1px;margin-bottom:9px;}
   .opt-h span{font-size:.76rem;}
   .opt-h b{font-size:.84rem;text-align:left;}
-  #cfgCCols{display:grid;grid-template-columns:repeat(3,32px);gap:12px 14px;}
-  #cfgCCols .cfg-sw.big{width:32px;height:32px;}
   .sw-phone{gap:10px;}
   .sw-phone .cfg-sw{width:22px;height:22px;}
   .devtype{border-radius:10px;}
@@ -531,8 +524,6 @@ section{scroll-margin-top:calc(var(--hdr-h) + 10px);}
 @media (max-width:360px){
   :root{--gut:16px;}
   .buy{column-gap:12px;}
-  #cfgCCols{grid-template-columns:repeat(3,29px);gap:10px 10px;}
-  #cfgCCols .cfg-sw.big{width:29px;height:29px;}
 }
 @media (max-width:720px) and (max-height:700px){
   .hero{padding-top:14px;}
@@ -581,16 +572,9 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
 .relay-picked span{display:block;font-size:.82rem;color:var(--ink-2);line-height:1.35;margin-top:2px}
 .relay-picked button{border:0;background:none;color:var(--cta);font:500 .88rem var(--f-ui);cursor:pointer;padding:6px}
 @keyframes rpIn{from{transform:scale(.96);opacity:0}}
-.mr-zone{min-height:120px;border-radius:16px;overflow:hidden}
+.mr-zone{border-radius:16px}
 .mr-loading{padding:28px 16px;text-align:center;font-size:.88rem;color:var(--ink-3);background:var(--paper-2);border-radius:16px;margin:0}
 .mr-loading .link{border:0;background:none;color:var(--cta);font:inherit;text-decoration:underline;cursor:pointer;padding:0}
-/* le widget Mondial Relay apporte son propre style : on l'aligne sur le site */
-#mrWidget,#mrWidget *{font-family:var(--f-ui)!important;box-sizing:border-box}
-#mrWidget .MRW-Search,#mrWidget .Search{background:var(--paper-2)!important;border:0!important;border-radius:14px!important}
-#mrWidget input[type=text]{border:0!important;border-radius:10px!important;background:var(--paper)!important;padding:10px 12px!important;font-size:16px!important}
-#mrWidget button,#mrWidget .MRW-BtGo{border-radius:10px!important}
-#mrWidget .MRW-Results,#mrWidget .MRW-Map{border-radius:14px!important;overflow:hidden}
-#mrWidget .leaflet-container{min-height:240px}
 .cart-foot{padding:16px 24px calc(18px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--paper)}
 .totals{margin:0 0 14px}
 .totals div{display:flex;justify-content:space-between;gap:12px;font-size:.88rem;color:var(--ink-2);padding:3px 0}
@@ -632,6 +616,106 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
 .ship-note{font-size:.8rem;color:var(--ink-2);margin:10px 2px 18px}
 .relay-help{font-size:.88rem;color:var(--ink-2);margin:0 0 12px}
 #relayBox[hidden],#homeBox[hidden]{display:none}
+.sc-search{display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px;border-radius:16px;background:var(--paper-2)}
+.sc-search input{min-width:0;height:48px;border:0;border-radius:12px;background:var(--paper);padding:0 14px;font:500 16px var(--f-ui);color:var(--ink);letter-spacing:.04em}
+.sc-search input:focus{outline:2px solid var(--ink);outline-offset:0}
+.sc-go{height:48px;padding:0 18px;border-radius:12px;background:var(--ink);color:#fff;font-size:.92rem}
+.sc-go:disabled{opacity:.6}
+
+/* ================= SÉLECTEUR DE TEINTE : cartes ================= */
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cfg-sw.tile{width:100%;min-width:0;height:auto;border-radius:18px;padding:10px 6px 11px;display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:var(--ts);box-shadow:inset 0 0 0 2px transparent;transform:none;text-align:center;font-family:var(--f-ui);
+  transition:box-shadow .25s cubic-bezier(.2,0,0,1),transform .35s cubic-bezier(.34,1.56,.64,1),background-color .25s}
+.cfg-sw.tile .tile-img{display:grid;place-items:center;width:100%;aspect-ratio:1/1.05}
+.cfg-sw.tile img{width:62%;height:auto;max-height:100%;object-fit:contain;filter:drop-shadow(0 8px 10px rgba(0,0,0,.14));transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.cfg-sw.tile .tile-n{font-size:.86rem;font-weight:600;color:var(--ink);line-height:1.2}
+.cfg-sw.tile .tile-m{font-size:.66rem;font-weight:600;letter-spacing:.09em;color:var(--ink-2)}
+.cfg-sw.tile:hover img{transform:translateY(-3px) rotate(-3deg)}
+.cfg-sw.tile.on{transform:none;box-shadow:inset 0 0 0 2px var(--ink),0 12px 24px -14px rgba(0,0,0,.35)}
+.cfg-sw.tile.on img{transform:translateY(-2px) scale(1.06)}
+.cfg-sw.tile:active{transform:scale(.97)}
+.cfg-sw.tile:focus-visible{outline:2px solid var(--cta);outline-offset:2px}
+/* la scène prend la teinte choisie, pour que la page ne paraisse pas vide */
+.cfg-stage{background:radial-gradient(120% 90% at 50% 0%,var(--tint-soft) 0%,transparent 70%),radial-gradient(90% 70% at 50% 110%,var(--tint-soft) 0%,transparent 65%),var(--paper-2)!important;transition:background-color .4s}
+@media(max-width:720px){
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .cfg-sw.tile{border-radius:14px;padding:8px 4px 9px}
+  .cfg-sw.tile .tile-img{aspect-ratio:1/.8}
+  .cfg-sw.tile img{width:auto;height:100%;max-width:60%}
+  .cfg-sw.tile .tile-n{font-size:.78rem}
+  .cfg-sw.tile .tile-m{display:none}
+}
+/* la scène suit le défilement pendant qu'on choisit : plus de grand vide sous le téléphone */
+.cfg-stage{align-self:start;position:sticky;top:76px}
+@media(max-width:720px){.cfg-stage{height:min(66vh,540px);min-height:340px;top:68px}}
+
+/* ===== Teintes : 6 cartes sur une seule ligne, pleine largeur ===== */
+.buy .opt-tint{grid-column:1 / -1;grid-row:1}
+.buy .scene{grid-column:1;grid-row:2}
+.buy .opts{grid-column:2;grid-row:2}
+.buy .buy-foot{grid-column:2;grid-row:3}
+.buy{grid-template-rows:auto auto 1fr}
+.opt-tint .opt-h{flex-direction:row;align-items:baseline;justify-content:space-between}
+.tiles{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.cfg-sw.tile .tile-img{aspect-ratio:1/.9}
+@media(max-width:720px){
+  .buy{grid-template-rows:auto auto auto;row-gap:14px}
+  .buy .buy-foot{grid-column:1 / -1;grid-row:3}
+  .tiles{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+  .cfg-sw.tile{border-radius:12px;padding:7px 2px 6px}
+  .cfg-sw.tile .tile-img{aspect-ratio:1/1.1}
+  .cfg-sw.tile img{width:auto;height:100%;max-width:72%}
+  .cfg-sw.tile .tile-n{display:none}
+  .opt-tint .opt-h{flex-direction:row;align-items:baseline}
+}
+
+/* accents du site = teinte choisie */
+.btn-buy,.cart-pay,#wheelSpinBtn{transition:background-color .4s,box-shadow .4s}
+::selection{background:var(--tint-soft)}
+
+/* ===== Panier : plus d'air ===== */
+.cart-panel{width:min(520px,100%)}
+.cart-head{padding:28px 32px 12px}
+.cart-head h2{font-size:1.5rem}
+.cart-body{padding:14px 32px 36px}
+.cart-steps{margin:8px 0 32px;gap:10px}
+.cart-steps li{padding-top:11px;font-size:.82rem}
+.cart-item{grid-template-columns:84px 1fr auto;gap:20px;padding:22px 0}
+.ci-vis{width:84px;height:84px;border-radius:20px}
+.ci-txt h3{font-size:1.05rem;margin-bottom:4px}
+.qty{margin-top:14px}
+.relay{margin-top:40px}
+.relay-h h3{font-size:1.2rem;margin-bottom:8px}
+.relay-h p{margin-bottom:22px;line-height:1.55}
+.ship-opt{padding:18px 20px;gap:16px;grid-template-columns:44px 1fr auto}
+.ship-ic{width:44px;height:44px}
+.ship-opt+.ship-opt{margin-top:12px}
+.relay-picked{padding:18px 20px;gap:16px;margin-bottom:20px}
+.cart-foot{padding:24px 32px calc(24px + env(safe-area-inset-bottom))}
+.totals{margin-bottom:20px}
+.totals div{padding:5px 0;font-size:.92rem}
+.totals .tot{padding-top:14px;font-size:1.15rem}
+.cart-safe{margin-top:16px}
+@media(max-width:720px){
+  .cart-panel{width:100%}
+  .cart-head{padding:28px 24px 10px}
+  .cart-body{padding:10px 24px 28px}
+  .cart-steps{margin:6px 0 24px}
+  .cart-item{grid-template-columns:68px 1fr auto;gap:16px;padding:18px 0}
+  .ci-vis{width:68px;height:68px}
+  .relay{margin-top:30px}
+  .ship-opt{padding:16px}
+  .cart-foot{padding:18px 24px calc(18px + env(safe-area-inset-bottom))}
+  .totals{margin-bottom:16px}
+}
+
+/* ===== Compatibilité : remontée juste sous le configurateur, compacte ===== */
+.compat{padding:clamp(28px,4vw,48px) 0!important}
+.compat-in{background:var(--tint-soft);border-radius:28px;padding:clamp(22px,3.5vw,40px);transition:background-color .4s}
+.compat h2{font-size:clamp(1.4rem,2.6vw,2rem)}
+.compat .lead-s{margin-top:8px}
+@media(max-width:720px){.compat-in{grid-template-columns:1fr;gap:14px;border-radius:22px;padding:20px}}
 
 </style>
 </head>
@@ -680,6 +764,13 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
     </div>
 
     <div class="buy" id="configurateur">
+      
+
+      <div class="opt opt-tint">
+        <div class="opt-h"><span>Teinte</span><b id="cfgCColVal"></b></div>
+        <div class="tiles" id="cfgCCols" role="group" aria-label="Teinte"></div>
+      </div>
+
             <div class="scene">
         <div class="cfg-stage" id="cfgStage" aria-live="polite">
           <div id="cfgPhone" aria-hidden="true"></div>
@@ -710,11 +801,6 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
 
 
       <div class="opts">
-        <div class="opt">
-          <div class="opt-h"><span>Teinte</span><b id="cfgCColVal"></b></div>
-          <div class="sw-wrap"><span class="sw-ring" aria-hidden="true"></span><div class="swrow sw-case" id="cfgCCols"></div></div>
-        </div>
-
         <div class="opt">
           <div class="opt-h"><span>Téléphone</span></div>
           <div class="devtype" id="cfgDevType" role="radiogroup" aria-label="Type de téléphone">
@@ -758,6 +844,30 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
     </div>
   </div>
 </section>
+
+<!-- ================= COMPATIBILITÉ ================= -->
+<section class="compat" id="compatibilite">
+  <div class="wrap compat-in">
+    <div class="compat-head">
+      <h2>Votre pilule rentre&nbsp;?</h2>
+      <p class="lead-s"><b id="cpFit">33</b> des <b id="cpTotal">43</b> pilules vérifiées rentrent dans Pils. Tapez le nom de la vôtre.</p>
+    </div>
+    <div class="finder">
+      <label class="find-in">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="cpQ" type="search" placeholder="Leeloo, Optilova, Jasminelle…" autocomplete="off" aria-label="Nom de votre pilule">
+      </label>
+      <div class="find-quick" id="cpQuick"></div>
+      <div class="find-res" id="cpRes" aria-live="polite"></div>
+      <details class="find-all">
+        <summary><span>Voir les <b id="cpTotal2">43</b> pilules vérifiées</span></summary>
+        <div id="cpAll"></div>
+      </details>
+      <p class="cp-method">Accessoire de rangement, pas un conseil médical. En cas de doute, mesurez votre plaquette : 97 × 54 mm maximum.</p>
+    </div>
+  </div>
+</section>
+
 
 <!-- ================= POURQUOI ================= -->
 <section class="why" id="pourquoi">
@@ -814,29 +924,6 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
       </li>
     </ol>
     <a class="btn btn-ghost" href="#commander">Choisir ma teinte</a>
-  </div>
-</section>
-
-<!-- ================= COMPATIBILITÉ ================= -->
-<section class="compat" id="compatibilite">
-  <div class="wrap compat-in">
-    <div class="compat-head">
-      <h2>Votre pilule rentre&nbsp;?</h2>
-      <p class="lead-s"><b id="cpFit">33</b> des <b id="cpTotal">43</b> pilules vérifiées rentrent dans Pils. Tapez le nom de la vôtre.</p>
-    </div>
-    <div class="finder">
-      <label class="find-in">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-        <input id="cpQ" type="search" placeholder="Leeloo, Optilova, Jasminelle…" autocomplete="off" aria-label="Nom de votre pilule">
-      </label>
-      <div class="find-quick" id="cpQuick"></div>
-      <div class="find-res" id="cpRes" aria-live="polite"></div>
-      <details class="find-all">
-        <summary><span>Voir les <b id="cpTotal2">43</b> pilules vérifiées</span></summary>
-        <div id="cpAll"></div>
-      </details>
-      <p class="cp-method">Accessoire de rangement, pas un conseil médical. En cas de doute, mesurez votre plaquette : 97 × 54 mm maximum.</p>
-    </div>
   </div>
 </section>
 
@@ -966,14 +1053,18 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
         </div>
         <p class="ship-note">Point relais offert avec le code <b>AUTOMNE</b>, déjà appliqué.</p>
         <div id="relayBox">
-          <p class="relay-help">Entrez votre code postal, puis touchez un relais.</p>
+          <p class="relay-help">Entrez votre code postal, puis choisissez un relais sur la carte.</p>
           <div class="relay-picked" id="relayPicked" hidden>
             <svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>
             <div><b id="rpName"></b><span id="rpAddr"></span></div>
             <button type="button" id="rpChange">Changer</button>
           </div>
-          <div class="mr-zone" id="mrZone"><p class="mr-loading" id="mrLoading">Chargement des points relais…</p></div>
-          <input type="hidden" id="mrTarget">
+          <div class="mr-zone" id="mrZone">
+            <div class="sc-search">
+              <input type="text" id="scZip" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="Code postal" aria-label="Code postal">
+              <button type="button" class="btn sc-go" id="scGo">Voir les relais</button>
+            </div>
+          </div>
         </div>
         <p class="relay-help" id="homeBox" hidden>Vous saisirez votre adresse à l’étape du paiement.</p>
       </div>
@@ -1649,7 +1740,7 @@ function renderCfgPhoneColors(){
 function renderCfgCaseColors(){
   var el=document.getElementById('cfgCCols');
   el.innerHTML=ORDER.map(function(k,i){
-    return '<button type="button" class="cfg-sw big'+(i===S.cc?' on':'')+'" data-i="'+i+'" title="'+NAMES[k]+'" aria-label="'+NAMES[k]+'" style="background:'+PAL[k].bg+';"></button>';
+    return '<button type="button" class="cfg-sw tile'+(i===S.cc?' on':'')+'" data-i="'+i+'" aria-label="'+NAMES[k]+'" aria-pressed="'+(i===S.cc)+'" style="--t:'+PAL[k].bg+';--ts:'+PAL[k].soft+';"><span class="tile-img"><img src="'+LID_IMGS[k]+'" alt="" draggable="false"></span><span class="tile-n">'+NAMES[k]+'</span><span class="tile-m">'+MOOD[k]+'</span></button>';
   }).join('');
   Array.prototype.forEach.call(el.querySelectorAll('.cfg-sw'),function(b){
     b.addEventListener('click',function(){
@@ -2003,6 +2094,8 @@ renderCfg();requestAnimationFrame(cfgLayout);
     root.style.setProperty('--tint-ink', p.ink);
     root.style.setProperty('--bg', p.bg);
     root.style.setProperty('--soft', p.soft);
+    var AC={rose:['#C8395E','#AE2F50'],orange:['#C2570C','#A64A09'],jaune:['#8F6B00','#785A00'],vert:['#4F7A52','#42684A'],bleu:['#2F6FA3','#265D8B'],violet:['#6B4FA0','#5A4189']}[k];
+    if(AC){root.style.setProperty('--cta',AC[0]);root.style.setProperty('--cta-2',AC[1]);}
     var n = (typeof NAMES !== 'undefined') ? NAMES[k] : '';
     Array.prototype.forEach.call(document.querySelectorAll('[data-colname]'), function(e){ e.textContent = n; });
     Array.prototype.forEach.call(document.querySelectorAll('.box[data-key]'), function(b){ b.classList.toggle('on', b.getAttribute('data-key') === k); });
@@ -2130,16 +2223,16 @@ renderCfg();requestAnimationFrame(cfgLayout);
 /* ═════════ Panier → point relais Mondial Relay → paiement Shopify ═════════
    Tout se fait dans le navigateur : pas de backend.
    1. le panier reprend la sélection du configurateur (teinte, téléphone, anneau)
-   2. le widget officiel Mondial Relay (ParcelShop Picker) fait choisir un relais
+   2. le sélecteur de points relais Sendcloud (Mondial Relay) fait choisir un relais
    3. « Payer » crée un panier Shopify (Storefront API, cartCreate) avec
       l'adresse du relais préremplie et l'identifiant du relais en attributs,
       puis redirige vers le checkout Shopify. */
 window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
-  /* Code enseigne Mondial Relay (8 caractères, espaces compris).
-     « BDTEST  » = code de test public : à remplacer par le vôtre. */
-  mrBrand   : 'BDTEST  ',
-  mrCountry : 'FR',
-  mrMode    : '24R',          /* 24R = Point Relais standard */
+  /* Sélecteur de points relais Sendcloud (contrat Mondial Relay de Sendcloud).
+     Clé PUBLIQUE de l'intégration « Sendcloud API » — jamais la clé secrète. */
+  scKey     : 'c05e4f40-e201-4a65-af74-7183bf6f1c12',
+  scCarrier : 'mondial_relay',
+  country   : 'FR',
   discount  : 'AUTOMNE',      /* code appliqué automatiquement au panier Shopify */
   maxQty    : 5,
   /* Modes de livraison : le titre doit correspondre au tarif créé dans Shopify
@@ -2227,56 +2320,72 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
   function showErr(msg){ errBox.textContent = msg; errBox.hidden = false; }
   function hideErr(){ errBox.hidden = true; errBox.textContent = ''; }
 
-  /* ---------- widget Mondial Relay (chargé à la première ouverture) ---------- */
-  function addCSS(href){ var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.appendChild(l); }
-  function addJS(src){ return new Promise(function(res, rej){ var s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = function(){ rej(new Error('Échec du chargement : ' + src)); }; document.head.appendChild(s); }); }
-  var mrLoading = null;
-  function loadMR(){
-    if (st.mrReady || mrLoading) return;
-    addCSS('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
-    mrLoading = (window.jQuery ? Promise.resolve() : addJS('https://code.jquery.com/jquery-3.7.1.min.js'))
-      .then(function(){ return window.L ? null : addJS('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'); })
-      .then(function(){ return addJS('https://widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js'); })
-      .then(initMR)
-      ['catch'](function(e){
-        mrLoading = null;
-        $('mrZone').innerHTML = '<p class="mr-loading">Impossible de charger la carte des points relais. Vérifiez votre connexion puis <button type="button" class="link" id="mrRetry">réessayez</button>.</p>';
-        $('mrRetry').addEventListener('click', loadMR);
-        console.warn('[Pils] Mondial Relay :', e);
-      });
-  }
-  function initMR(){
-    var $j = window.jQuery;
-    if (!$j || !$j.fn || !$j.fn.MR_ParcelShopPicker) throw new Error('widget Mondial Relay indisponible');
-    $('mrZone').innerHTML = '<div id="mrWidget"></div>';
-    $j('#mrWidget').MR_ParcelShopPicker({
-      Target: '#mrTarget',
-      Brand: C.mrBrand,
-      Country: C.mrCountry,
-      AllowedCountries: C.mrCountry,
-      ColLivMod: C.mrMode,
-      NbResults: '7',
-      Responsive: true,
-      ShowResultsOnMap: true,
-      DisplayMapInfo: true,
-      EnableGeolocalisatedParcelShops: true,
-      OnParcelShopSelected: pickRelay
+  /* ---------- sélecteur de points relais Sendcloud ---------- */
+  var scLoading = null;
+  function loadMR(){                       /* précharge le script dès l'ouverture */
+    if (window.sendcloud && window.sendcloud.servicePoints) return Promise.resolve();
+    if (scLoading) return scLoading;
+    scLoading = new Promise(function(res, rej){
+      var s = document.createElement('script');
+      s.src = 'https://embed.sendcloud.sc/spp/1.0.0/api.min.js';
+      s.onload = res; s.onerror = function(){ scLoading = null; rej(new Error('script Sendcloud indisponible')); };
+      document.head.appendChild(s);
     });
-    st.mrReady = true;
+    return scLoading;
   }
-  function pickRelay(d){
-    if (!d || !d.ID) return;
-    var addr = [d.Adresse1, d.Adresse2].filter(Boolean).join(', ').replace(/\s+/g, ' ').trim();
+  /* le sélecteur s'ouvre en surimpression : on s'assure qu'il passe devant le panier */
+  function liftOverlays(){
+    var mo = new MutationObserver(function(list){
+      list.forEach(function(m){ Array.prototype.forEach.call(m.addedNodes, function(n){
+        if (n.nodeType === 1 && n !== cart && n.parentNode === document.body) n.style.zIndex = '2147483000';
+      }); });
+    });
+    mo.observe(document.body, { childList: true });
+    setTimeout(function(){ mo.disconnect(); }, 15000);
+  }
+  function openPicker(){
+    var zip = ($('scZip').value || '').replace(/\D/g, '');
+    hideErr();
+    var btn = $('scGo'), lbl = btn.textContent;
+    btn.textContent = 'Ouverture…'; btn.disabled = true;
+    loadMR().then(function(){
+      btn.textContent = lbl; btn.disabled = false;
+      if (!window.sendcloud || !window.sendcloud.servicePoints) throw new Error('sélecteur indisponible');
+      liftOverlays();
+      window.sendcloud.servicePoints.open({
+        apiKey: C.scKey,
+        country: C.country.toLowerCase(),
+        postalCode: zip,
+        language: 'fr-fr',
+        carriers: C.scCarrier,
+        servicePointId: st.relay ? st.relay.scId : undefined
+      }, pickRelay, function(errors){
+        console.warn('[Pils] Sendcloud :', errors);
+        showErr('Impossible d’afficher les points relais pour le moment. Réessayez dans un instant.');
+      });
+    })['catch'](function(e){
+      btn.textContent = lbl; btn.disabled = false;
+      showErr('Impossible de charger les points relais. Vérifiez votre connexion et réessayez.');
+      console.warn('[Pils] Sendcloud :', e);
+    });
+  }
+  $('scGo').addEventListener('click', openPicker);
+  $('scZip').addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); openPicker(); } });
+  function pickRelay(p){
+    if (!p || !(p.id || p.code)) return;
+    var clean = function(v){ return String(v || '').replace(/\s+/g, ' ').trim(); };
+    var street = clean([p.house_number, p.street].filter(Boolean).join(' '));
     st.relay = {
-      id: String(d.ID).trim(),
-      name: String(d.Nom || '').replace(/\s+/g, ' ').trim(),
-      address1: (d.Adresse1 || '').trim(),
-      address2: (d.Adresse2 || '').trim(),
-      zip: String(d.CP || '').trim(),
-      city: String(d.Ville || '').trim(),
-      country: String(d.Pays || C.mrCountry).trim().toUpperCase()
+      id: clean(p.code || p.id),           /* numéro Mondial Relay du relais */
+      scId: p.id,                          /* identifiant Sendcloud du relais */
+      name: clean(p.name),
+      address1: street,
+      address2: '',
+      zip: clean(p.postal_code),
+      city: clean(p.city),
+      country: clean(p.country || C.country).toUpperCase()
     };
-    st.relay.full = addr + ', ' + st.relay.zip + ' ' + st.relay.city;
+    st.relay.full = street + ', ' + st.relay.zip + ' ' + st.relay.city;
     $('rpName').textContent = st.relay.name;
     $('rpAddr').textContent = st.relay.full;
     $('relayPicked').hidden = false;
@@ -2311,15 +2420,16 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
     var input = {
       lines: lines,
       buyerIdentity: { countryCode: (r && r.country) || 'FR' },
-      attributes: [{ key: 'shipping_mode', value: r ? 'Mondial Relay ' + C.mrMode : 'Lettre verte suivie' }]
+      attributes: [{ key: 'shipping_mode', value: r ? 'Mondial Relay (Sendcloud)' : 'Lettre verte suivie' }]
     };
     if (r) {
       input.attributes.push(
         { key: 'relay_id', value: r.id },
         { key: 'relay_country', value: r.country },
         { key: 'relay_name', value: r.name },
-        { key: 'relay_address', value: r.full });
-      input.note = 'Point relais Mondial Relay ' + r.country + '-' + r.id + ' — ' + r.name + ', ' + r.full;
+        { key: 'relay_address', value: r.full },
+        { key: 'sendcloud_service_point_id', value: String(r.scId || '') });
+      input.note = 'Point relais Mondial Relay n° ' + r.id + ' — ' + r.name + ', ' + r.full;
     }
     if (C.discount) input.discountCodes = [C.discount];
     if (r && withDelivery) input.delivery = { addresses: [{
