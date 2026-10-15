@@ -650,24 +650,15 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
 .cfg-stage{align-self:start;position:sticky;top:76px}
 @media(max-width:720px){.cfg-stage{height:min(66vh,540px);min-height:340px;top:68px}}
 
-/* ===== Teintes : 6 cartes sur une seule ligne, pleine largeur ===== */
-.buy .opt-tint{grid-column:1 / -1;grid-row:1}
-.buy .scene{grid-column:1;grid-row:2}
-.buy .opts{grid-column:2;grid-row:2}
-.buy .buy-foot{grid-column:2;grid-row:3}
-.buy{grid-template-rows:auto auto 1fr}
-.opt-tint .opt-h{flex-direction:row;align-items:baseline;justify-content:space-between}
-.tiles{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
-.cfg-sw.tile .tile-img{aspect-ratio:1/.9}
+/* ===== Teintes : 3 + 3 dans la colonne de droite ===== */
+.tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cfg-sw.tile .tile-img{aspect-ratio:1/.85}
 @media(max-width:720px){
-  .buy{grid-template-rows:auto auto auto;row-gap:14px}
-  .buy .buy-foot{grid-column:1 / -1;grid-row:3}
-  .tiles{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
-  .cfg-sw.tile{border-radius:12px;padding:7px 2px 6px}
-  .cfg-sw.tile .tile-img{aspect-ratio:1/1.1}
-  .cfg-sw.tile img{width:auto;height:100%;max-width:72%}
+  .tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .cfg-sw.tile{border-radius:12px;padding:6px 2px}
+  .cfg-sw.tile .tile-img{aspect-ratio:1/1.15}
+  .cfg-sw.tile img{width:auto;height:100%;max-width:74%}
   .cfg-sw.tile .tile-n{display:none}
-  .opt-tint .opt-h{flex-direction:row;align-items:baseline}
 }
 
 /* accents du site = teinte choisie */
@@ -716,6 +707,16 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
 .compat h2{font-size:clamp(1.4rem,2.6vw,2rem)}
 .compat .lead-s{margin-top:8px}
 @media(max-width:720px){.compat-in{grid-template-columns:1fr;gap:14px;border-radius:22px;padding:20px}}
+
+/* ===== Pied du panier compact ===== */
+.cart-foot{padding:12px 24px calc(12px + env(safe-area-inset-bottom))!important}
+.totals{display:flex;flex-wrap:wrap;justify-content:space-between;margin:0 0 10px!important}
+.totals div{padding:0!important;font-size:.78rem!important}
+.totals div:not(.tot){display:none}
+.totals .tot{width:100%;padding:0!important;font-size:1rem!important}
+.cart-pay{height:50px;font-size:.98rem}
+.cart-safe{margin-top:8px!important;font-size:.68rem}
+.cart-err{margin-bottom:8px;padding:8px 12px;font-size:.8rem}
 
 </style>
 </head>
@@ -766,11 +767,6 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
     <div class="buy" id="configurateur">
       
 
-      <div class="opt opt-tint">
-        <div class="opt-h"><span>Teinte</span><b id="cfgCColVal"></b></div>
-        <div class="tiles" id="cfgCCols" role="group" aria-label="Teinte"></div>
-      </div>
-
             <div class="scene">
         <div class="cfg-stage" id="cfgStage" aria-live="polite">
           <div id="cfgPhone" aria-hidden="true"></div>
@@ -801,6 +797,11 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
 
 
       <div class="opts">
+        <div class="opt opt-tint">
+          <div class="opt-h"><span>Teinte</span><b id="cfgCColVal"></b></div>
+          <div class="tiles" id="cfgCCols" role="group" aria-label="Teinte"></div>
+        </div>
+
         <div class="opt">
           <div class="opt-h"><span>Téléphone</span></div>
           <div class="devtype" id="cfgDevType" role="radiogroup" aria-label="Type de téléphone">
