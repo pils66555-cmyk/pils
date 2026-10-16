@@ -2314,6 +2314,11 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
   },
   /* Variant IDs numériques (facultatif). Laissés vides, ils sont retrouvés
      automatiquement par le nom de la teinte via l'API Storefront. */
+  /* Produit caché « Livraison à domicile » (0 €, 1 kg) : ajouté au panier en mode
+     domicile pour que le checkout n'affiche que le tarif domicile (règle de poids).
+     Variant ID numérique facultatif ; sinon retrouvé par le handle. */
+  homeHandle  : 'livraison-domicile',
+  homeVariant : '59224198545740',
   variants     : { rose:'', orange:'', jaune:'', vert:'', bleu:'', violet:'' },
   packVariants : { rose:'', orange:'', jaune:'', vert:'', bleu:'', violet:'' }
 };
@@ -2542,6 +2547,7 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
     var lines = [{ merchandiseId: st.variant.id, quantity: st.qty }];
     if (s.ring && !s.universal && s.ringVariant && /^\d+$/.test(String(s.ringVariant)))
       lines.push({ merchandiseId: 'gid://shopify/ProductVariant/' + s.ringVariant, quantity: 1 });
+    if (st.mode === 'home' && homeGid) lines.push({ merchandiseId: homeGid, quantity: 1 });
     var input = {
       lines: lines,
       buyerIdentity: { countryCode: (r && r.country) || 'FR' },
@@ -2584,7 +2590,21 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
     })['catch'](function(e){ console.warn('[Pils] présélection livraison :', e); });
     return Promise.race([job, new Promise(function(res){ setTimeout(res, 3000); })]);
   }
+  /* variante du produit caché « Livraison à domicile » */
+  var homeGid = C.homeVariant ? 'gid://shopify/ProductVariant/' + C.homeVariant : null;
+  var HOME_Q = 'query($h:String!){ product(handle:$h){ variants(first:1){ nodes{ id availableForSale } } } }';
+  function getHome(){
+    if (st.mode !== 'home' || homeGid) return Promise.resolve();
+    return window.PILS_SF(HOME_Q, { h: C.homeHandle }).then(function(d){
+      var v = d && d.product && d.product.variants.nodes[0];
+      if (!v) throw new Error('Option livraison à domicile introuvable (produit « ' + C.homeHandle + ' »).');
+      homeGid = v.id;
+    });
+  }
   function create(withDelivery){
+    return getHome().then(function(){ return createCart(withDelivery); });
+  }
+  function createCart(withDelivery){
     return window.PILS_SF(CART_CREATE, { input: buildInput(withDelivery) }).then(function(d){
       var res = d && d.cartCreate;
       if (!res) throw new Error('Réponse Shopify vide.');
