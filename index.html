@@ -662,6 +662,14 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
 .cart-pay{min-height:44px;font-size:.9rem;padding-top:10px;padding-bottom:10px}
 .cart-safe{margin-top:6px;font-size:.66rem}
 .cart-err{font-size:.76rem;padding:8px 12px;margin-bottom:8px}
+.rl-list{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;max-height:38vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.rl-list li button{width:100%;text-align:left;display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 12px;border:1px solid var(--line,rgba(0,0,0,.1));border-radius:12px;background:var(--paper);font:inherit;color:var(--ink);cursor:pointer}
+.rl-list li button:active,.rl-list li button:focus-visible{border-color:var(--cta);outline:none;box-shadow:0 0 0 2px var(--cta)}
+.rl-list b{font-size:.8rem;text-transform:capitalize}
+.rl-list .d{font-size:.72rem;color:var(--cta);font-weight:600;white-space:nowrap}
+.rl-list small{grid-column:1/-1;font-size:.7rem;color:var(--ink-3);text-transform:capitalize;line-height:1.3}
+.rl-list .link{border:0;background:none;color:var(--cta);font:inherit;text-decoration:underline;padding:0;width:auto;display:inline}
+.rl-list .rl-msg{font-size:.76rem;color:var(--ink-3);padding:10px 4px}
 @media(max-width:720px){
   .cart-panel{height:94vh}
   @supports(height:1dvh){.cart-panel{height:94dvh}}
@@ -1115,7 +1123,7 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
         </div>
         <p class="ship-note">Point relais offert avec le code <b>AUTOMNE</b>, déjà appliqué.</p>
         <div id="relayBox">
-          <p class="relay-help">Entrez votre code postal, puis choisissez un relais sur la carte.</p>
+          <p class="relay-help">Entrez votre code postal, puis choisissez votre relais dans la liste.</p>
           <div class="relay-picked" id="relayPicked" hidden>
             <svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>
             <div><b id="rpName"></b><span id="rpAddr"></span></div>
@@ -1126,6 +1134,7 @@ html.cart-lock,html.cart-lock body{overflow:hidden}
               <input type="text" id="scZip" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="Code postal" aria-label="Code postal">
               <button type="button" class="btn sc-go" id="scGo">Voir les relais</button>
             </div>
+            <ul class="rl-list" id="rlList" hidden></ul>
           </div>
         </div>
         <p class="relay-help" id="homeBox" hidden>Vous saisirez votre adresse à l’étape du paiement.</p>
@@ -2427,31 +2436,51 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
     }, 300);
   }
   function restoreCart(){ cart.style.visibility = ''; cart.style.pointerEvents = ''; cart.style.zIndex = ''; }
+  /* liste des relais intégrée au panier (API publique Sendcloud) — plus de fenêtre par-dessus */
+  var rlReq = 0, lastZip = '';
+  function low(v){ return String(v || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
   function openPicker(){
     var zip = ($('scZip').value || '').replace(/\D/g, '');
+    var list = $('rlList');
     hideErr();
-    var btn = $('scGo'), lbl = btn.textContent;
-    btn.textContent = 'Ouverture…'; btn.disabled = true;
-    loadMR().then(function(){
-      btn.textContent = lbl; btn.disabled = false;
-      if (!window.sendcloud || !window.sendcloud.servicePoints) throw new Error('sélecteur indisponible');
-      liftOverlays();
-      window.sendcloud.servicePoints.open({
-        apiKey: C.scKey,
-        country: C.country.toLowerCase(),
-        postalCode: zip,
-        language: 'fr-fr',
-        carriers: C.scCarrier,
-        servicePointId: st.relay ? st.relay.scId : undefined
-      }, pickRelay, function(errors){
-        console.warn('[Pils] Sendcloud :', errors); restoreCart();
-        showErr('Impossible d’afficher les points relais pour le moment. Réessayez dans un instant.');
+    if (zip.length !== 5){ $('scZip').focus(); return; }
+    if (zip === lastZip && !list.hidden && list.children.length > 1) return;
+    lastZip = zip;
+    var my = ++rlReq;
+    list.hidden = false;
+    list.innerHTML = '<li class="rl-msg">Recherche des relais…</li>';
+    var car = Array.isArray(C.scCarrier) ? C.scCarrier.join(',') : (C.scCarrier || 'mondial_relay');
+    var url = 'https://servicepoints.sendcloud.sc/api/v2/service-points/?country=' + encodeURIComponent(C.country.toUpperCase()) +
+      '&postal_code=' + zip + '&carrier=' + encodeURIComponent(car) + '&access_token=' + encodeURIComponent(C.scKey);
+    fetch(url, { headers: { 'Accept': 'application/json' } })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(data){
+        if (my !== rlReq) return;
+        var pts = (Array.isArray(data) ? data : (data.results || data.service_points || []))
+          .filter(function(p){ return p && p.is_active !== false; })
+          .sort(function(a, b){ return (a.distance || 0) - (b.distance || 0); })
+          .slice(0, 12);
+        if (!pts.length){ list.innerHTML = '<li class="rl-msg">Aucun relais trouvé pour ce code postal.</li>'; return; }
+        list.innerHTML = '';
+        pts.forEach(function(p){
+          var li = document.createElement('li'), b = document.createElement('button');
+          b.type = 'button';
+          var km = p.distance != null ? (p.distance >= 1000 ? (p.distance / 1000).toFixed(1).replace('.', ',') + ' km' : Math.round(p.distance) + ' m') : '';
+          var nm = document.createElement('b'); nm.textContent = low(p.name);
+          var d = document.createElement('span'); d.className = 'd'; d.textContent = km;
+          var ad = document.createElement('small');
+          ad.textContent = low([p.house_number, p.street].filter(Boolean).join(' ')) + ', ' + (p.postal_code || '') + ' ' + low(p.city);
+          b.appendChild(nm); b.appendChild(d); b.appendChild(ad);
+          b.addEventListener('click', function(){ list.hidden = true; pickRelay(p); });
+          li.appendChild(b); list.appendChild(li);
+        });
+      })['catch'](function(e){
+        if (my !== rlReq) return;
+        console.warn('[Pils] relais :', e);
+        lastZip = '';
+        list.innerHTML = '<li class="rl-msg">Impossible de charger les relais. <button type="button" class="link" id="rlRetry">Réessayer</button></li>';
+        var rb = document.getElementById('rlRetry'); if (rb) rb.addEventListener('click', openPicker);
       });
-    })['catch'](function(e){
-      btn.textContent = lbl; btn.disabled = false;
-      showErr('Impossible de charger les points relais. Vérifiez votre connexion et réessayez.');
-      console.warn('[Pils] Sendcloud :', e);
-    });
   }
   $('scGo').addEventListener('click', openPicker);
   payBtn.addEventListener('click', function(e){
@@ -2469,7 +2498,6 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
   });
   $('scZip').addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); openPicker(); } });
   function pickRelay(p){
-    restoreCart();
     if (!p || !(p.id || p.code)) return;
     var clean = function(v){ return String(v || '').replace(/\s+/g, ' ').trim(); };
     var street = clean([p.house_number, p.street].filter(Boolean).join(' '));
@@ -2491,7 +2519,7 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
     hideErr(); syncPay();
   }
   $('rpChange').addEventListener('click', function(){
-    st.relay = null; $('relayPicked').hidden = true; $('mrZone').classList.remove('is-hidden'); syncPay();
+    st.relay = null; $('relayPicked').hidden = true; $('mrZone').classList.remove('is-hidden'); lastZip = ''; if ($('scZip').value.length === 5) openPicker(); syncPay();
     var z = $('mrZone'); if (z) z.scrollIntoView({ behavior:'smooth', block:'start' });
   });
 
@@ -2502,7 +2530,6 @@ window.PILS_CART_CONFIG = window.PILS_CART_CONFIG || {
       st.mode = r.value; hideErr();
       $('relayBox').hidden = st.mode !== 'relay';
       $('homeBox').hidden = st.mode !== 'home';
-      if (st.mode === 'relay') loadMR()['catch'](function(){});
       syncPay();
     });
   });
