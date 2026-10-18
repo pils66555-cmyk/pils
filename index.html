@@ -10,7 +10,7 @@
 <link rel="canonical" href="https://mypils.com/">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiNFMjlCQUIiLz48dGV4dCB4PSIzMiIgeT0iNDYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjQyIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiPlA8L3RleHQ+PGNpcmNsZSBjeD0iNDYiIGN5PSI0NiIgcj0iNSIgZmlsbD0id2hpdGUiLz48L3N2Zz4=">
 <meta property="og:title" content="Pils. — la V2 est en préparation">
-<meta property="og:description" content="Pause des ventes le temps de faire mieux. Laissez votre email pour être prévenue du retour.">
+<meta property="og:description" content="Pause des ventes le temps de préparer la V2 de Pils.">
 <meta property="og:image" content="https://mypils.com/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,35 +57,12 @@ h1{margin:0;font-weight:600;font-size:clamp(2.4rem,8.5vw,4.2rem);line-height:1;l
 .blister i.v2::after{content:"2";position:absolute;inset:0;display:grid;place-items:center;font-size:.62rem;font-weight:600;color:var(--ink-3)}
 @keyframes pop{to{transform:scale(1);opacity:1}}
 
-.form{width:100%;max-width:440px}
-.form label{display:block;font-size:.84rem;font-weight:500;color:var(--ink-2);margin:0 0 7px}
-.row{display:flex;gap:8px}
-.row input{flex:1;min-width:0;height:48px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);
-  font:inherit;font-size:16px;color:var(--ink);transition:border-color .15s,box-shadow .15s}
-.row input:focus{outline:none;border-color:var(--cta);box-shadow:0 0 0 3px rgba(200,57,94,.15)}
-.row input[aria-invalid="true"]{border-color:var(--cta)}
-.row button{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 18px;border:0;border-radius:12px;
-  background:var(--cta);color:#fff;font:inherit;font-weight:600;font-size:.95rem;cursor:pointer;white-space:nowrap;transition:background .15s}
-.row button:hover{background:var(--cta-2)}
-.row button svg{width:16px;height:16px;transition:transform .15s ease-out}
-.row button:hover svg{transform:translateX(2px)}
-.hint{margin:8px 0 0;font-size:.8rem;color:var(--ink-3)}
-.err{margin:8px 0 0;font-size:.8rem;color:var(--cta);display:none}
-.form.bad .err{display:block}.form.bad .hint{display:none}
-
-.ok{display:none;align-items:flex-start;gap:10px;font-size:.95rem;line-height:1.45;color:var(--ink)}
-.ok svg{flex:none;width:18px;height:18px;color:var(--ok);margin-top:2px}
-.ok span{color:var(--ink-3)}
-.ok b{font-weight:600;color:var(--ink)}
-.sent .form{display:none}.sent .ok{display:flex}
-
 .foot{margin-top:8px;width:100%;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;
   padding-top:22px;border-top:1px solid var(--line);font-size:.86rem;line-height:1.5;color:var(--ink-2)}
 .foot p{margin:0;max-width:30em}
 .foot b{color:var(--ink);font-weight:600}
 .foot a.mail{color:var(--ink-3);white-space:nowrap}
 
-@media(max-width:460px){.row{flex-direction:column}.row input{flex:none;width:100%}.row button{justify-content:center}}
 @media(prefers-reduced-motion:reduce){.status i,.blister i{animation:none;transform:none;opacity:1}}
 </style>
 </head>
@@ -103,21 +80,6 @@ h1{margin:0;font-weight:600;font-size:clamp(2.4rem,8.5vw,4.2rem);line-height:1;l
 
       <div class="blister" id="blister" aria-hidden="true"></div>
 
-      <form class="form" id="form" novalidate>
-        <label for="email">Être prévenue du retour</label>
-        <div class="row">
-          <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="vous@email.com" required>
-          <button type="submit">Me prévenir<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-        </div>
-        <p class="hint">Un seul email, le jour du lancement. Rien d'autre.</p>
-        <p class="err" id="err">Cet email ne semble pas valide.</p>
-      </form>
-
-      <p class="ok" role="status" aria-live="polite">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
-        <span><b>Presque fini.</b> Envoyez le message qui vient de s'ouvrir&nbsp;: on vous écrira à <b id="mailOut"></b> le jour du retour.</span>
-      </p>
-
       <div class="foot">
         <p><b>Déjà commandé&nbsp;?</b> Rien ne change pour vous&nbsp;: votre commande est préparée et expédiée normalement.</p>
         <a class="mail" href="mailto:contact@mypils.com">contact@mypils.com</a>
@@ -134,17 +96,6 @@ h1{margin:0;font-weight:600;font-size:clamp(2.4rem,8.5vw,4.2rem);line-height:1;l
   });
   var v = document.createElement('i'); v.className = 'v2'; v.style.animationDelay = (120 + 6 * 70) + 'ms'; b.appendChild(v);
 
-  var f = document.getElementById('form'), e = document.getElementById('email');
-  f.addEventListener('submit', function(ev){
-    ev.preventDefault();
-    var m = (e.value || '').trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m)){ f.classList.add('bad'); e.setAttribute('aria-invalid','true'); e.focus(); return; }
-    document.getElementById('mailOut').textContent = m;
-    document.getElementById('col').classList.add('sent');
-    location.href = 'mailto:contact@mypils.com?subject=' + encodeURIComponent('Prévenez-moi pour Pils. V2') +
-      '&body=' + encodeURIComponent('Bonjour,\n\nJe souhaite être prévenue du retour de Pils.\n\nMon email : ' + m);
-  });
-  e.addEventListener('input', function(){ f.classList.remove('bad'); e.removeAttribute('aria-invalid'); });
 })();
 </script>
 </body>
